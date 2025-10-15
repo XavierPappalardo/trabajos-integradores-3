@@ -97,7 +97,7 @@ def agregar_alumno():
                     print("El legajo ingresado es inválido. Por favor ingrese un legajo de 5 números")
                     continue
                 nuevo_promedio = float(input("Ingrese el promedio del nuevo alumno: "))
-                if nuevo_promedio >= 10 or nuevo_promedio <= 1:
+                if nuevo_promedio > 10 or nuevo_promedio < 1:
                     print("El nuevo promedio ingresado es inválido. Por favor ingrese un promedio entre 1 y 10")
                     continue
                 legajo_comprobacion = validar_existe_alumno(nuevo_legajo)
