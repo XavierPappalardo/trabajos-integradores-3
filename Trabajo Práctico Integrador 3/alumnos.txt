@@ -1,0 +1,4 @@
+nombre, apellido, legajo, notapromedio
+Juan, Perez, 53365, 8
+Maria, Lopez, 55654, 10
+Pablo, Gomez, 58999, 6
