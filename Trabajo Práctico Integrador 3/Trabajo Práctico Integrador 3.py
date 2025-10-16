@@ -34,9 +34,24 @@ def leer_alumnos():
 #Comprueba al agregar un nuevo alumno si el legajo está repetido
 
 def validar_existe_alumno(nuevo_legajo):
+    if os.path.exists("alumnos.txt") == True:
+        with open("alumnos.txt", "r") as archivo:
+            archivo.readline()
+            for linea in archivo:
+                auxiliar_diccionario = linea.strip().split(",")
+                nombre = auxiliar_diccionario[0].strip()
+                apellido = auxiliar_diccionario[1].strip()
+                legajo = auxiliar_diccionario[2].strip()
+                nota_promedio = auxiliar_diccionario[3].strip()
+                diccionario_alumnos[legajo] = {"nombre": nombre,
+                                               "apellido": apellido,
+                                               "legajo": legajo,
+                                               "notapromedio": nota_promedio,
+                                               }
     for i in diccionario_alumnos:
-        if nuevo_legajo in i:
+        if i == nuevo_legajo:
             return True
+    return False
 
 #Guarda los alumnos aprobados en el archivo aprobados.txt
         
@@ -70,49 +85,67 @@ def agregar_alumno():
     
     alfabeto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-    continuar_agregando = True
-    while continuar_agregando == True:
+    while True:
         agregar_nuevo = input("¿Desea agregar un nuevo alumno? Ingrese 'a' si así lo desea, o 'b' si ya no desea agregar más alumnos: ")
         if agregar_nuevo.lower() == "a":
             try:
-                caracter_valido = True
-                nuevo_nombre = input("Agregue el nombre del nuevo alumno: ")
-                for caracter in nuevo_nombre:
-                    if caracter not in alfabeto:
-                        caracter_valido = False
+                while True:
+                    caracter_valido = True
+                    nuevo_nombre = input("Agregue el nombre del nuevo alumno: ")
+                    if nuevo_nombre == "":
+                        print("El nombre ingresado no es válido. Por favor ingrese un nombre de alumno válido")
+                        continue
+                    for caracter in nuevo_nombre:
+                        if caracter not in alfabeto:
+                           caracter_valido = False
+                    if caracter_valido == False:
+                        print("El nombre ingresado no es válido. Por favor ingrese un nombre de alumno válido")
+                        continue
+                    else:
                         break
-                if caracter_valido == False:
-                    print("El nombre ingresado no es válido. Por favor ingrese un nombre de alumno válido")
-                    continue
-                nuevo_apellido = input("Ingrese el apellido del nuevo alumno: ")
-                for caracter in nuevo_apellido:
-                    if caracter not in alfabeto:
-                        caracter_valido = False
+                while True:
+                    caracter_valido = True
+                    nuevo_apellido = input("Ingrese el apellido del nuevo alumno: ")
+                    if nuevo_apellido == "":
+                        print("El apellido ingresado no es válido. Por favor ingrese un apellido de alumno válido")
+                        continue
+                    for caracter in nuevo_apellido:
+                        if caracter not in alfabeto:
+                           caracter_valido = False
+                    if caracter_valido == False:
+                        print("El apellido ingresado no es válido. Por favor ingrese un apellido de alumno válido")
+                        continue
+                    else:
                         break
-                if caracter_valido == False:
-                    print("El apellido ingresado no es válido. Por favor ingrese un apellido de alumno válido")
-                    continue
-                nuevo_legajo = input("Ingrese el legajo del nuevo alumno. Recuerde que debe estar compuesto de 5 números: ")
-                if len(nuevo_legajo) != 5:
-                    print("El legajo ingresado es inválido. Por favor ingrese un legajo de 5 números")
-                    continue
-                nuevo_promedio = float(input("Ingrese el promedio del nuevo alumno: "))
-                if nuevo_promedio > 10 or nuevo_promedio < 1:
-                    print("El nuevo promedio ingresado es inválido. Por favor ingrese un promedio entre 1 y 10")
-                    continue
-                legajo_comprobacion = validar_existe_alumno(nuevo_legajo)
-                if legajo_comprobacion == True:
-                    print(f"El legajo {nuevo_legajo} ya existe en el archivo alumnos.txt, no se permite su escritura")
-                    continue
-                else:
-                    diccionario_alumnos[nuevo_legajo] = {"nombre": nuevo_nombre,
-                                                         "apellido": nuevo_apellido,
-                                                         "legajo": nuevo_legajo,
-                                                         "notapromedio": nuevo_promedio,
-                                                         }
-                    with open("alumnos.txt", "a") as archivo:
-                        archivo.write(f"\n{nuevo_nombre}, {nuevo_apellido}, {nuevo_legajo}, {nuevo_promedio}")
-                    continue
+                while True:
+                    nuevo_legajo = input("Ingrese el legajo del nuevo alumno. Recuerde que debe estar compuesto de 5 números: ")
+                    if len(nuevo_legajo) != 5:
+                        print("El legajo ingresado es inválido. Por favor ingrese un legajo de 5 números")
+                        legajo_valido = False
+                    else:
+                        legajo_valido = True
+                    legajo_comprobacion = validar_existe_alumno(nuevo_legajo)
+                    if legajo_comprobacion == True:
+                        print(f"El legajo {nuevo_legajo} ya existe en el archivo alumnos.txt, no se permite su escritura")
+                    if legajo_comprobacion == False and legajo_valido == True:
+                        break
+                    else:
+                        continue
+                while True:
+                    nuevo_promedio = float(input("Ingrese el promedio del nuevo alumno: "))
+                    if nuevo_promedio > 10 or nuevo_promedio < 1:
+                        print("El nuevo promedio ingresado es inválido. Por favor ingrese un promedio entre 1 y 10")
+                        continue
+                    else:
+                        break
+                diccionario_alumnos[nuevo_legajo] = {"nombre": nuevo_nombre,
+                                                             "apellido": nuevo_apellido,
+                                                             "legajo": nuevo_legajo,
+                                                             "notapromedio": nuevo_promedio,
+                                                            }
+                with open("alumnos.txt", "a") as archivo:
+                    archivo.write(f"\n{nuevo_nombre}, {nuevo_apellido}, {nuevo_legajo}, {nuevo_promedio}")
+                    break
                              
             except ValueError:
                 print("Dato inválido. Ingrese datos válidos para cada apartado")
@@ -130,7 +163,7 @@ continuar_operando = True
 print("Hola, gracias por ingresar al sistema de registro de alumnos.")
 while continuar_operando == True:
     continuar_operando = True
-    operacion = input("Ingrese la operación que desea realizar. Ingrese: 'a'- Para leer el registro de alumnos, 'b'- Para agregar un nuevo alumno al registro, 'c'- Para ver la lista de alumnos aprobados, 'd'- Para salir del sistema: ")
+    operacion = input("Ingrese la operación que desea realizar.\nIngrese:\n'a'- Para leer el registro de alumnos\n'b'- Para agregar un nuevo alumno al registro\n'c'- Para ver la lista de alumnos aprobados\n'd'- Para salir del sistema: ")
     if operacion.lower() == "a":
         leer_alumnos()
     elif operacion.lower() == "b":
