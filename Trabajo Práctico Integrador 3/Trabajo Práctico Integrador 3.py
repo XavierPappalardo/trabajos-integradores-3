@@ -48,6 +48,9 @@ def validar_existe_alumno(nuevo_legajo):
                                                "legajo": legajo,
                                                "notapromedio": nota_promedio,
                                                }
+    else:
+        print("No se puede agregar éste legajo a 'alumnos.txt' porque dicho archivo no existe.\nSe lo redirigirá a la operación 'Leer registro de alumnos' para crearlo")
+        leer_alumnos()
     for i in diccionario_alumnos:
         if i == nuevo_legajo:
             return True
